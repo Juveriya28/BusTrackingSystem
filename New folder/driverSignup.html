@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+            /*background: linear-gradient(120deg, #2980b9, #8e44ad);*/
+            /* background: black; */
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .mb-5 {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            /* background: yellow; */
+            background: white;
+            border-radius: 10px;
+        }
+
+        .mb-5 h3 {
+            text-align: center;
+            padding: 0 0 20px 0;
+            margin-top: 20px;
+            /*border-bottom: 1px solid silver;*/
+        }
+
+        .mb-5 .box {
+            padding: 0 40px;
+            box-sizing: border-box;
+            
+        }
+
+        .box .form-control {
+            position: relative;
+            border-bottom: 2px solid rgb(32, 30, 30);
+            margin: 30px 0;
+        }
+        .box input{
+            width: 100%;
+            padding: 0 5px;
+            height: 40px;
+            font-size: 16px;
+            border: none;
+            background: none;
+            outline: none;
+        }
+        .box label{
+            position: absolute;
+            top: 50%;
+            left: 5px;
+            color: #adadad;
+            transform: translateY(-50%);
+            font-size: 16px;
+            pointer-events: none;
+        }
+       
+        #additional_btn:hover{
+            color: #fff;
+        }
+         /* Media Queries for Mobile Responsive */
+         @media (max-width: 576px) {
+            .mb-5 {
+                width: 90%;
+            }
+        }
+
+        /* Button Hover Effect */
+        .box button:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="mb-5">
+        <h3 class="mb-3">Sign Up</h3>
+        <div class="box">
+            <input type="text" placeholder="Username" id="userInp" class="form-control mb-3">
+            <input type="email" placeholder="Email" id="emailInp" class="form-control mb-3">
+            <!-- <input type="text" placeholder="Fullname" id="nameInp" class="form-control mb-3"> -->
+            
+            <input type="password" placeholder="Password" id="passInp" class="form-control mb-3">
+            <input type="number" placeholder="+91 8375899765" id="phInp" class="form-control mb-3">
+            <input type="text" placeholder="Vehicle No" id="vehInp" class="form-control mb-3">
+            <input type="number" placeholder="Bus No" id="busInp" class="form-control mb-3">
+            <button type="text" id="sub_btn" class="btn btn-outline-primary mb-3">Sign Up</button>
+            <a href="parentLogin.Html" class="badge badge-secondary py-1 w-100 mb-3">Already Have an Account</a>
+
+               <!-- Add the new button below -->
+        <button type="button" id="additional_btn" class="btn btn-outline-secondary w-100 h-25 "><a href="./location.html" style="text-decoration: none;">Allow to access your location</a></button>
+       </div>
+    </div>
+
+
+    <!--------------------------firebase config---------------------------->
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-analytics.js";
+        import { getDatabase, ref, set, get, child, update, remove } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+            apiKey: "AIzaSyBOKH7Ogqy5iUW6ckzpMTuLs-FNUSfNFXg",
+            authDomain: "my-project-b2466.firebaseapp.com",
+            databaseURL: "https://my-project-b2466-default-rtdb.firebaseio.com",
+            projectId: "my-project-b2466",
+            storageBucket: "my-project-b2466.appspot.com",
+            messagingSenderId: "260050885927",
+            appId: "1:260050885927:web:2542b60c325a9a33ab5d02",
+            measurementId: "G-3519Q0SVX2"
+        };
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getDatabase(app);
+        const auth = getAuth();
+        //  --------------------------------the references----------------------------------//
+
+        const name = document.getElementById('nameInp');
+        const email = document.getElementById('emailInp');
+        const username = document.getElementById('userInp');
+        const pass = document.getElementById('passInp');
+        const phNo = document.getElementById('phInp');
+        const vehNo = document.getElementById('vehInp');
+        const busNo = document.getElementById('busInp');
+        const submit = document.getElementById('sub_btn');
+
+        
+            sub_btn.addEventListener("click", (e) => {
+                const email = document.getElementById("emailInp").value;
+                const pass = document.getElementById("passInp").value;
+                const username = document.getElementById("userInp").value;
+                const vehNo = document.getElementById("vehInp").value;
+                const phNo = document.getElementById("phInp").value;
+                const busNo = document.getElementById("busInp").value;
+
+                // const dom = document.getElementById("domBox").value;
+                createUserWithEmailAndPassword(auth, email, pass)
+
+                    .then((userCredential) => {
+                        const user = userCredential.user;
+                        set(ref(db, "UserLists/" + username), {
+                            Username: username,
+                            Email: email,
+                            password: pass,
+                            PhoneNo:phNo,
+                            VehicleNo: vehNo,
+                            BusNo: busNo
+                        })
+                        alert("You are signed up!")
+                    })
+                    .catch((error) => {
+                        const errorCode = error.code;
+                        const errorMessage = error.message;
+                        alert(errorMessage)
+                    });
+            });
+
+    </script>
+
+</body>
+</html>

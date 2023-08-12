@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Location</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
+
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+    <style>
+        #map { height: 350px }
+    </style>
+
+</head>
+<body>
+    <div>
+        <p style="display: inline;">Enter your name:</p>
+        <input placeholder="name" id="name" >
+    </div>
+
+    <br>
+
+    <div id="map">
+        
+    </div>
+      
+    <p id="lat"></p>
+    <p id="lng"></p>
+    <button id="sub_btn">Store Location</button>
+
+    <script type="module" >
+
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-analytics.js";
+        import { getDatabase, ref, set, get, child, update, remove } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyC-m5NUzqOvzFoAz3KCDaGSDZ2BM1TayB8",
+            authDomain: "login-form-b104f.firebaseapp.com",
+            databaseURL: "https://login-form-b104f-default-rtdb.firebaseio.com",
+            projectId: "login-form-b104f",
+            storageBucket: "login-form-b104f.appspot.com",
+            messagingSenderId: "525181487067",
+            appId: "1:525181487067:web:56410042fbd75fffe089fe",
+            measurementId: "G-GFT9XJ0BG1"
+        };
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getDatabase(app);
+        const auth = getAuth();
+        //  --------------------------------the references----------------------------------//
+
+        const latitudeElement = document.getElementById('lat');
+        const longitudeElement = document.getElementById('lng');
+
+        var map = L.map('map').setView([51.505, -0.09], 13);
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
+
+        let marker, circle, zoomed;
+
+        navigator.geolocation.watchPosition(success, error);
+
+        function success(pos) {
+            const latitude = pos.coords.latitude;
+            const longitude = pos.coords.longitude;
+            const accuracy = pos.coords.accuracy;
+
+            latitudeElement.textContent = `Latitude: ${latitude}`;
+            longitudeElement.textContent = `Longitude: ${longitude}`;
+
+            if (marker) {
+                map.removeLayer(marker);
+                map.removeLayer(circle);
+            }
+
+            marker = L.marker([latitude, longitude]).addTo(map);
+            circle = L.circle([latitude, longitude], { radius: accuracy }).addTo(map);
+
+            if (!zoomed) {
+                zoomed = map.fitBounds(circle.getBounds());
+            }
+
+            map.setView([latitude, longitude]);
+        }
+
+        function error(err) {
+            if (err.code === 1) {
+                alert("Please allow geolocation access");
+            } else {
+                alert("Cannot get current location");
+            }
+        }
+
+        // Initialize Firebase
+
+        var user = document.getElementById('name');
+        var button = document.getElementById('sub_btn');
+
+        function data() {
+            set(ref(db, 'DriverLocation/' + user.value), {
+                driver: user.value,
+                Latitude: latitudeElement.textContent.split(' ')[1],
+                Longitude: longitudeElement.textContent.split(' ')[1]
+            })
+                .then(() => {
+                    alert("Location added successfully");
+                })
+                .catch((error) => {
+                    alert(error);
+                });
+        }
+
+        button.addEventListener('click', data);
+
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home page</title>
+    <link rel="stylesheet" href="home.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+            * {
+                margin: auto;
+                padding: 0;
+                box-sizing: border-box;
+                transition: 0.5s;
+                box-sizing: border-box;
+                font-family: sans-serif;
+            }
+
+            .body {
+                width: 100vw;
+                height: 100vh;
+                background: linear-gradient(to left, rgba(0, 0, 0, 0.5)50%, rgb(0, 0, 0, 0.5)50%), url(bus.png) center / cover;
+                background-repeat: no-repeat;
+            }
+
+            .container {
+                width: 1200px;
+                height: 80px;
+                padding-top: 20%;
+                padding-left: 30%;
+
+                justify-content: space-around;
+                align-items: center;
+            }
+
+            .container h1 {
+                font-size: 40px;
+                font-weight: bold;
+                color: crimson;
+            }
+
+            .container p {
+                color: white;
+
+            }
+
+            button {
+                margin-top: 20px;
+                height: 50px;
+                width: 200px;
+                margin-right: 20px;
+                border-radius: 5px;
+                font-size: 20px;
+                font-weight: 600;
+            }
+            .login-btn a,.signup-btn a{
+                text-decoration: none;
+                color: crimson;
+            }
+
+            .signup-btn {
+                background-color: gray;
+            }
+
+            .signup-btn:hover {
+                background-color: white;
+                border-color: crimson;
+            }
+
+            .login-btn {
+                background-color: white;
+                border-width: 3px solid;
+                
+                color: white;
+            }
+            .login-btn:hover{
+                background-color: gray;
+                border-color: gray;
+                color: black;
+            }
+
+            /* media query */
+            @media(max-width:480px)
+            {
+                .body{
+                    height: 100vh;
+                    width: 100vw;
+                }
+            .body {
+                background: linear-gradient(to left, rgba(0, 0, 0, 0.5)50%, rgb(0, 0, 0, 0.5)50%), url(busmedia.png) center / cover;;
+                    height: 100vh;
+                width: 100vw;
+                background-repeat: no-repeat;
+            }
+            .container h1 {
+                font-size: 28px;
+                font-weight: bold;
+                color: crimson;
+            }
+            button {
+                margin-top: 20px;
+                height: 30px;
+                width: 120px;
+                margin-right: 20px;
+                border-radius: 5px;
+                font-size: 10px;
+                font-weight: 600;
+            }
+            .container {
+                width: 500px;
+                height: 80px;
+                padding-top: 30%;
+                padding-left: 30%;
+            
+                /* justify-content: space-around;
+                align-items: center; */
+            }
+        
+        /* media query */
+        @media (max-width: 480px) {
+            .body {
+                background: linear-gradient(to left, rgba(0, 0, 0, 0.5) 50%, rgb(0, 0, 0, 0.5) 50%), url(busmedia.png) center / cover;
+                height: 100vh;
+                width: 100vw;
+                background-repeat: no-repeat;
+            }
+
+            .container h1 {
+                font-size: 28px;
+                font-weight: bold;
+                color: crimson;
+            }
+
+            button {
+                margin-top: 20px;
+                height: 30px;
+                width: 120px;
+                margin-right: 20px;
+                border-radius: 5px;
+                font-size: 10px;
+                font-weight: 600;
+            }
+
+            .container {
+                width: 100%;
+                height: 100%;
+                padding-top: 30%;
+                padding-left: 10%;
+            }
+        }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="navbar">
+
+    </div>
+    <div class="body">
+        <div class="container">
+            <h1>Sultan-Uloom Public School, <br>
+                Banjara Hills</h1><br>
+            <h3 style="color:white;">Stay updated with your child's live location..</h3>
+            <br>
+            <button class="login-btn"><a href="driverSignup.html">Driver's Login</a></button>
+            <button class="signup-btn"><a href="parentSignup.html">Gardian's login</a> </button>
+        </div>
+    </div>
+</body>
+
+</html>

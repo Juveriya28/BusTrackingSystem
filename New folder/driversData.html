@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get work data</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+<body>
+    
+    <div class="container mt-3">
+        <table class="table table-dark">
+            <thead>
+                <th>Sno</th>
+                <th>Name</th>
+                <th>Phone No</th>
+                <th>Bus No</th>
+                <th>Veh No</th>
+                <!-- <th>Domain</th> -->
+            </thead>
+            <tbody id="tbody1"></tbody>
+        </table>
+    </div>
+    <a href="./l.html" style="margin-left: 45%;">Location</a>
+
+
+    <script type="module">
+
+        // FILLING THE TABLE
+        var stdNo = 0;
+        var tbody = document.getElementById('tbody1');
+
+        function AddItemToTable( name, phNo,busNo,vehNo){
+
+            let trow = document.createElement("tr");
+
+            let td1 = document.createElement("td");
+            let td2 = document.createElement("td");
+            let td3 = document.createElement("td");
+            let td4 = document.createElement("td");
+            let td5 = document.createElement("td");
+
+
+            td1.innerHTML = ++stdNo;
+            td2.innerHTML = name;
+            td3.innerHTML = phNo;
+            td4.innerHTML = busNo;
+            td5.innerHTML = vehNo;
+
+            trow.appendChild(td1);
+            trow.appendChild(td2);
+            trow.appendChild(td3);
+            trow.appendChild(td4);
+            trow.appendChild(td5);
+
+            tbody.appendChild(trow);
+        }
+
+        function AddAllItemsToTable(TheStudent){
+                stdNo=0;
+                tbody.innerHTML= " ";
+                TheStudent.forEach(elements => {
+                    AddItemToTable(elements. Username,elements.PhoneNo,elements.BusNo,elements.VehicleNo);  //,elements.Domain
+                });
+            }
+
+            
+    
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+        import {ref,get,child,getDatabase,onValue,set} from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js"
+        
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBOKH7Ogqy5iUW6ckzpMTuLs-FNUSfNFXg",
+            authDomain: "my-project-b2466.firebaseapp.com",
+            databaseURL: "https://my-project-b2466-default-rtdb.firebaseio.com",
+            projectId: "my-project-b2466",
+            storageBucket: "my-project-b2466.appspot.com",
+            messagingSenderId: "260050885927",
+            appId: "1:260050885927:web:2542b60c325a9a33ab5d02",
+            measurementId: "G-3519Q0SVX2"
+        };
+
+            // Initialize Firebase
+            const app = initializeApp(firebaseConfig);
+
+            const db=getDatabase(app)
+
+
+            function GetAllDataRealTime(){
+                const dbRef=ref(db);
+
+                get(child(dbRef,"UserLists/"))  
+
+                .then((snapshot)=>{
+                    var students =[];
+                     snapshot.forEach(childSnapshot => {
+                        students.push(childSnapshot.val());
+                     });
+
+                     AddAllItemsToTable(students);
+                })
+            }
+
+            window.onload = GetAllDataRealTime();
+    </script>
+</body>
+</html>

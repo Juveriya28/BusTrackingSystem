@@ -1,0 +1,184 @@
+<!--  <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LocationRetrieve</title>
+</head>
+<body>
+    
+    <div class="loccation">
+        <h4>Sno<h4>
+        <h4>Name</h4>
+
+        <div id="tbody1"><div>
+    </div>
+
+    <script type="module">
+
+        // FILLING THE TABLE
+        var stdNo = 0;
+        var tbody = document.getElementById('tbody1');
+
+      
+
+          
+
+    </script>
+</body>
+</html> 
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Location</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
+
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+    <style>
+        #map { height: 350px }
+    </style>
+
+</head>
+<body>
+    <div id="map"></div>
+
+    <script type="module">
+
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyC-m5NUzqOvzFoAz3KCDaGSDZ2BM1TayB8",
+            authDomain: "login-form-b104f.firebaseapp.com",
+            databaseURL: "https://login-form-b104f-default-rtdb.firebaseio.com",
+            projectId: "login-form-b104f",
+            storageBucket: "login-form-b104f.appspot.com",
+            messagingSenderId: "525181487067",
+            appId: "1:525181487067:web:56410042fbd75fffe089fe",
+            measurementId: "G-GFT9XJ0BG1"
+        };
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+      
+        var map = L.map('map').setView([0, 0], 2);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: 'Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        const markersLayer = L.layerGroup().addTo(map);
+
+        function addMarker(latitude, longitude) {
+            const marker = L.marker([latitude, longitude]).addTo(markersLayer);
+        }
+
+        // Retrieve stored latitude and longitude from Firebase
+        const locationRef = ref(db, 'DriverLocation');
+
+        onValue(locationRef, (snapshot) => {
+            markersLayer.clearLayers();
+            snapshot.forEach((childSnapshot) => {
+                const { Latitude, Longitude } = childSnapshot.val();
+                addMarker(parseFloat(Latitude), parseFloat(Longitude));
+            });
+        });
+
+    </script>
+</body>
+</html>
+ -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Location</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+        integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
+
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+        integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+    <style>
+        #map {
+            height: 350px
+        }
+    </style>
+
+</head>
+
+<body>
+    <div id="map"></div>
+
+    <script type="module">
+
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyC-m5NUzqOvzFoAz3KCDaGSDZ2BM1TayB8",
+            authDomain: "login-form-b104f.firebaseapp.com",
+            databaseURL: "https://login-form-b104f-default-rtdb.firebaseio.com",
+            projectId: "login-form-b104f",
+            storageBucket: "login-form-b104f.appspot.com",
+            messagingSenderId: "525181487067",
+            appId: "1:525181487067:web:56410042fbd75fffe089fe",
+            measurementId: "G-GFT9XJ0BG1"
+        };
+
+        console.log("Firebase config done");
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        var map = L.map('map').setView([0, 0], 2);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: 'Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        const markersLayer = L.layerGroup().addTo(map);
+
+        function addMarker(latitude, longitude) {
+            if (isNaN(latitude) || isNaN(longitude)) {
+                console.error("Invalid latitude or longitude:", latitude, longitude);
+                return;
+            }
+
+            const marker = L.marker([latitude, longitude]).addTo(markersLayer);
+        }
+
+        // Retrieve stored latitude and longitude from Firebase
+
+        const locationRef = ref(db, 'DriverLocation');
+        console.log(locationRef);
+
+        onValue(locationRef, (snapshot) => {
+            markersLayer.clearLayers();
+            console.log("Snapshot:", snapshot.val());
+            snapshot.forEach((childSnapshot) => {
+                const location = childSnapshot.val();
+                const latitude = parseFloat(location.Latitude);
+                const longitude = parseFloat(location.Longitude);
+                console.log("Latitude:", latitude);
+                console.log("Longitude:", longitude);
+                if (!isNaN(latitude) && !isNaN(longitude)) {
+                    addMarker(latitude, longitude);
+                } else {
+                    console.error("Invalid latitude or longitude:", latitude, longitude);
+                }
+            });
+        });
+    </script>
+</body>
+
+
+</html>

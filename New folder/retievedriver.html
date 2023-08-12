@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retrieve Data from fireBase</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+        .Table th{
+            padding: 10px;
+            
+        }
+        .Table{
+            margin-left: 20px;
+        }
+       
+    </style>
+</head>
+
+<body>
+    <div class="container mt-3">
+        <table class="table table-dark">
+            <thead>
+                <th>SNo</th>
+                <th>Name</th>
+                <th>PhoneNo</th>
+                <th>VehicleNo</th>
+            </thead>
+            <tbody id="tbody1"></tbody>
+        </table>
+    </div>
+    
+
+
+    <script type="module">
+         // Import the functions you need from the SDKs you need
+         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+        import { getDatabase, ref ,child ,onValue ,get} from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
+
+        import{getAnalytics} from "https://www.gstatic.com/firebasejs/9.22.2/firebase-analytics.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+            apiKey: "AIzaSyCAeL4C-Qdmhz7QHHL7BES3FuGe6L22398",
+            authDomain: "bus-tacking-system.firebaseapp.com",
+            databaseURL: "https://bus-tacking-system-default-rtdb.firebaseio.com",
+            projectId: "bus-tacking-system",
+            storageBucket: "bus-tacking-system.appspot.com",
+            messagingSenderId: "717122803058",
+            appId: "1:717122803058:web:229666436f061ac58b79eb",
+            measurementId: "G-GHWCCJ5YZH"
+        };
+ // Initialize Firebase
+ const app = initializeApp(firebaseConfig);
+       const analytics = getAnalytics(app);
+        // import { getDatabase, ref, child, onValue, get }
+        //     from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
+
+        const db = getDatabase();
+
+        //    reference
+
+        var driverNo = 0;
+        var tbody = document.getElementById("tbody1");
+
+        function driverData(name, vehNo, phNo) {
+            let row = document.createElement("tr");
+            let SiNo = document.createElement("td");
+            let name1 = document.createElement("td");
+            let vehNo1 = document.createElement("td");
+            let phNo1 = document.createElement("td");
+
+            SiNo.innerHTML = ++driverNo;
+            name1.innerHTML = name;
+            vehNo1.innerHTML = vehNo;
+            phNo1.innerHTML = phNo;
+
+            row.appendChild(SiNo);
+            row.appendChild(name1);
+            row.appendChild(vehNo1);
+            row.appendChild(phNo1);
+
+            tbody.appendChild(row);
+        }
+
+        function AddAllItemstoTable(TheDriver) {
+            driverNo = 0;
+            tbody.innerHTML = "";
+            TheDriver.forEach(element => {
+                driverData(element.NameOfDriver, element.PhoneNo, element.VehicleNo, element.EmailId, element.Password);
+
+            });
+        }
+
+//--------Getting all Data----------//
+        function showDriverData() {
+            const dbRef = ref(db);
+
+            get(child(dbRef, "Driver's Data/"))
+                .then((snapshot) => {
+                    var drivers = [];
+
+                    snapshot.forEach(childSnapshot => {
+
+                        drivers.push(childSnapshot.val());
+                    });
+                    AddAllItemstoTable(drivers);
+
+                });
+        }
+        function GetAllDataRealTime() {
+    const dbRef = ref(db,"Driver's Data/");
+
+    onValue(dbRef, (snapshot) => {
+        var driver=[];
+
+        snapshot.forEach(childSnapshot => {
+
+            driver.push(childSnapshot.val());
+        });
+
+        AddAllItemstoTable(driver);
+
+    })
+}
+        window.onload=showDriverData;
+
+
+
+    </script>
+</body>
+
+</html>
